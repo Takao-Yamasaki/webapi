@@ -1,0 +1,21 @@
+version: '3.9'
+services:
+  api:
+    build: ./api
+    ports:
+      - 8080:8080
+  db:
+    image: mysql:8.0.33
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=mypassword
+      - MYSQL_DATABASE=appdb
+    volumes:
+      - db-storage:/var/lib/mysql
+      # docker-entrypoint-initdb.dにクエリを置いておくと、コンテナ起動時にSQLクエリが自動で実行される
+      - ./db/initdb:/docker-entrypoint-initdb.d
+
+# 上で使用するdb-storageをここで用意している
+volumes:
+  db-storage:
